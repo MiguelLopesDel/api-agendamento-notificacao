@@ -18,4 +18,9 @@ public class AgendamentoController {
     public ResponseEntity<AgendamentoOutDTO> gravarAgendamento(@RequestBody AgendamentoInDTO agendamento){
         return ResponseEntity.ok(service.gravarAgendamento(agendamento));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AgendamentoOutDTO> buscarAgendamento(@PathVariable Long id){
+        return ResponseEntity.ok(service.buscarAgendamento(id));
+    }
 }
