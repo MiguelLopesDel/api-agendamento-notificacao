@@ -1,4 +1,4 @@
-package com.miguel.notificacao_api.business;
+package com.miguel.notificacao_api.business.mapper;
 
 import com.miguel.notificacao_api.controller.dto.AgendamentoInDTO;
 import com.miguel.notificacao_api.controller.dto.AgendamentoOutDTO;
