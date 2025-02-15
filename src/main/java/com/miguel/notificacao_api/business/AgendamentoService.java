@@ -25,4 +25,10 @@ public class AgendamentoService {
         );
     }
 
+    public void cancelarAgendamento(Long id) {
+        repository.save(agendamentoMapper.toEntityCancelado(
+                repository.findById(id).orElseThrow(() -> new NotFoundException("id não encontrado"))
+        ));
+    }
+
 }
