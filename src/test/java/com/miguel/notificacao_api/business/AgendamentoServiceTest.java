@@ -5,6 +5,7 @@ import com.miguel.notificacao_api.controller.dto.AgendamentoInDTO;
 import com.miguel.notificacao_api.controller.dto.AgendamentoOutDTO;
 import com.miguel.notificacao_api.infra.entity.Agendamento;
 import com.miguel.notificacao_api.infra.enums.StatusNotificacao;
+import com.miguel.notificacao_api.infra.exception.NotFoundException;
 import com.miguel.notificacao_api.infra.repository.AgendamentoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +46,7 @@ class AgendamentoServiceTest {
     }
 
     @Test
-    void criaAgendamento() {
+    void deveGravarAgendamento() {
         when(mapper.toEntity(inDTO)).thenReturn(agendamento);
         when(repository.save(agendamento)).thenReturn(agendamento);
         when(mapper.toOut(agendamento)).thenReturn(outDTO);
@@ -56,10 +59,38 @@ class AgendamentoServiceTest {
     }
 
     @Test
-    void buscarAgendamento() {
+    void deveBuscarAgendamentoComSucesso() {
+        when(mapper.toOut(agendamento)).thenReturn(outDTO);
+        when(repository.findById(1L)).thenReturn(Optional.of(agendamento));
+
+        AgendamentoOutDTO realOutDTO = service.buscarAgendamento(1L);
+        verify(repository, times(1)).findById(1L);
+        verify(mapper, times(1)).toOut(agendamento);
+        assertThat(realOutDTO).usingRecursiveComparison().isEqualTo(outDTO);
     }
 
     @Test
-    void cancelarAgendamento() {
+    void deveLancarNotFoundExceptionQuandoAgendamentoNaoExistir() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> service.buscarAgendamento(1L));
+    }
+
+    @Test
+    void deveCancelarAgendamento() {
+        when(repository.save(agendamento)).thenReturn(agendamento);
+        when(mapper.toEntityCancelado(agendamento)).thenReturn(agendamento);
+        when(repository.findById(1L)).thenReturn(Optional.of(agendamento));
+
+        service.cancelarAgendamento(1L);
+
+        verify(repository, times(1)).save(agendamento);
+        verify(mapper, times(1)).toEntityCancelado(agendamento);
+        verify(repository, times(1)).findById(1L);
+    }
+
+    @Test
+    void deveLancarNotFoundExceptionQuandoNaoEncontrarAgendamentoParaCancelar() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> service.cancelarAgendamento(1L));
     }
 }
