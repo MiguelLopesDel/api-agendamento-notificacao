@@ -16,11 +16,11 @@ public class AgendamentoService {
     private final IAgendamentoMapper agendamentoMapper;
 
     public AgendamentoOutDTO gravarAgendamento(AgendamentoInDTO inDTO) {
-        return agendamentoMapper.toEntity(repository.save(agendamentoMapper.toEntity(inDTO)));
+        return agendamentoMapper.toOut(repository.save(agendamentoMapper.toEntity(inDTO)));
     }
 
     public AgendamentoOutDTO buscarAgendamento(Long id) {
-        return agendamentoMapper.toEntity(
+        return agendamentoMapper.toOut(
                 repository.findById(id).orElseThrow(() -> new NotFoundException("id não encontrado"))
         );
     }
