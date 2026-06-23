@@ -1,7 +1,6 @@
 services:
   postgres:
     image: postgres:15
-    container_name: postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -23,11 +22,11 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      SPRING.DATASOURCE.URL: jdbc:postgresql://postgres:5432/db_agendamento
-      SPRING.DATASOURCE.USERNAME: postgres
-      SPRING.DATASOURCE.PASSWORD: 123
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/db_agendamento
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123
     ports:
-      - "8080:8080"
+      - "${API_PORT:-8080}:8080"
 
 volumes:
   postgres_data:

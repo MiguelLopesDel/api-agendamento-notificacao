@@ -4,6 +4,7 @@ import com.miguel.notificacao_api.business.mapper.IAgendamentoMapper;
 import com.miguel.notificacao_api.controller.dto.AgendamentoInDTO;
 import com.miguel.notificacao_api.controller.dto.AgendamentoOutDTO;
 import com.miguel.notificacao_api.infra.entity.Agendamento;
+import com.miguel.notificacao_api.infra.enums.CanalNotificacao;
 import com.miguel.notificacao_api.infra.enums.StatusNotificacao;
 import com.miguel.notificacao_api.infra.exception.NotFoundException;
 import com.miguel.notificacao_api.infra.repository.AgendamentoRepository;
@@ -37,12 +38,12 @@ class AgendamentoServiceTest {
 
     @BeforeEach
     void setUp() {
-        LocalDateTime envio = LocalDateTime.of(2025, 2, 2, 2, 5, 5);
-        agendamento = new Agendamento(1L, "test@gmail.com", "238293232", envio, LocalDateTime.now(), null, "Teste Mensagem", StatusNotificacao.AGENDADO);
-        inDTO = new AgendamentoInDTO("test@gmail.com", "238293232", "Teste Mensagem",
-                envio);
-        outDTO = new AgendamentoOutDTO(1L, "test@gmail.com", "238293232", "Teste Mensagem",
-                envio, StatusNotificacao.AGENDADO);
+        LocalDateTime envio = LocalDateTime.of(2030, 2, 2, 2, 5, 5);
+        agendamento = new Agendamento(1L, "test@gmail.com", null, null, envio, LocalDateTime.now(), null, "Teste Mensagem", CanalNotificacao.EMAIL, StatusNotificacao.AGENDADO);
+        inDTO = new AgendamentoInDTO("test@gmail.com", null, null, "Teste Mensagem",
+                CanalNotificacao.EMAIL, envio);
+        outDTO = new AgendamentoOutDTO(1L, "test@gmail.com", null, null, "Teste Mensagem",
+                CanalNotificacao.EMAIL, envio, StatusNotificacao.AGENDADO);
     }
 
     @Test
